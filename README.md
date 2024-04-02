@@ -1,44 +1,44 @@
 # Final Project Python Basics
 
-## 1. Instalacja pakietu lokalnie
-Aby zainstalować pakiet lokalnie (na przykład, aby używać go jak każdego innego zainstalowanego pakietu Pythona), otwórz terminal, przejdź do katalogu zawierającego `setup.py` i uruchom:
+## 1. Installing the package locally
+To install the package locally (for example, to use it like any other installed Python package), open a terminal, navigate to the directory containing `setup.py` and run:
 ```
 pip install .
 ```
-To zainstaluje Twój pakiet w bieżącym środowisku Pythona.
+This will install your package in the current Python environment.
 
-## 2. Instalacja w trybie edytowalnym (dla rozwoju)
-Jeśli planujesz dalej rozwijać swój pakiet, możesz chcieć zainstalować go w tzw. trybie `edytowalnym`. Pozwoli to na wprowadzanie zmian w kodzie pakietu i ich natychmiastowe odzwierciedlanie bez potrzeby ponownej instalacji. Aby to zrobić, użyj:
+## 2. Installation in editable mode (for development)
+If you plan to further develop your package, you may want to install it in the so-called `editable` mode. This will allow you to make changes to the package code and reflect them immediately without reinstalling. To do this, use:
 ```
 pip install -e .
 ```
-Powyższa komenda powinna być również uruchomiona w katalogu z plikiem `setup.py`.
+The above command should also be run in the directory with the `setup.py` file.
 
-## 3. Budowanie dystrybucji
-Jeśli chcesz podzielić się swoim pakietem z innymi lub opublikować go na Python Package Index (PyPI), musisz najpierw zbudować dystrybucję. W terminalu, w katalogu z `setup.py`, uruchom:
+## 3. Building distribution
+If you want to share your package with others or publish it on Python Package Index (PyPI), you must first build a distribution. In the terminal, in the directory with `setup.py`, run:
 ```
 python setup.py sdist bdist_wheel
 ```
-To utworzy dystrybucję źródłową (sdist) i dystrybucję koła (wheel) w katalogu `dist/`. Te pliki można następnie wgrać na PyPI.
+This will create a source distribution (sdist) and a wheel distribution (wheel) in the `dist/` directory. These files can then be uploaded to PyPI.
 
-## 4. Wgrywanie na PyPI
-Aby wgrać pakiet na PyPI, musisz najpierw zainstalować `twine`, jeśli jeszcze tego nie zrobiłeś:
+## 4. Uploading to PyPI
+To upload a package to PyPI, you must first install `twine`, if you haven't already done so:
 ```
 pip install twine
 ```
-Następnie, użyj `twine` do przesłania swoich plików dystrybucyjnych na PyPI:
+Then, use `twine` to upload your distribution files to PyPI:
 ```
 twine upload dist/*
 ```
-Będziesz musiał wprowadzić swoją nazwę użytkownika i hasło do PyPI, aby kontynuować.
+You will need to enter your PyPI username and password to continue.
 
-## Ważne uwagi
-- Przed publikacją swojego pakietu na PyPI, upewnij się, że masz unikalną nazwę dla swojego pakietu. Możesz sprawdzić dostępność nazwy, przeszukując PyPI.
-- Rozważ dodanie pliku `requirements.txt` do swojego projektu, jeśli Twój pakiet zależy od innych pakietów. Chociaż `install_requires` w `setup.py` obsługuje zależności podczas instalacji pakietu, `requirements.txt` jest przydatny dla użytkowników chcących zainstalować zależności za `pomocą pip install -r requirements.txt`.
-- Pamiętaj, aby utrzymać wersjonowanie swojego projektu i aktualizować numer wersji w `setup.py` przy każdej zmianie, którą chcesz opublikować.
+## Important notes
+- Before publishing your package on PyPI, make sure you have a unique name for your package. You can check the availability of the name by searching PyPI.
+- Consider adding a `requirements.txt` file to your project if your package depends on other packages. Although `install_requires` in `setup.py` handles dependencies when installing a package, `requirements.txt` is useful for users who want to install dependencies with `pip install -r requirements.txt`.
+- Remember to maintain versioning of your project and update the version number in `setup.py` with each change you want to publish.
 
 
-## Kod pliku `setup.py`
+## File code `setup.py`.
 ```
 from setuptools import setup, find_packages
 
@@ -70,32 +70,32 @@ setup(
     ],
 )
 ```
-W powyższym kodzie:
-- `name` to nazwa Twojego pakietu.
-- `version` to aktualna wersja Twojego pakietu.
-- `packages=find_packages()`, automatycznie znajduje pakiety do załączenia. Upewnij się, że Twoje moduły/pakiety są odpowiednio strukturyzowane w katalogach.
-- `entry_points` definiuje punkt wejścia do aplikacji, dzięki czemu można ją uruchamiać z linii komend. Zmodyfikuj ścieżkę final_project_python_basics.main:main zgodnie z rzeczywistą lokalizacją funkcji main w Twoim projekcie.
-- `author`, `author_email`, `description`, `keywords` i `license` to metadane opisujące Twój projekt.
-- `long_description` może zawierać dłuższy opis, który zazwyczaj jest wczytywany z pliku README.
-- `install_requires` pozwala zdefiniować zależności, które muszą być zainstalowane wraz z Twoim pakietem. Jeśli Twój projekt zależy od zewnętrznych bibliotek Pythona, wymień je tutaj.
-- `python_requires` określa wersje Pythona kompatybilne z Twoim pakietem.
-- `classifiers` to lista klasyfikatorów, które pomagają innym znaleźć Twój projekt na PyPI i zrozumieć jego kontekst.
+In the code above:
+- `name` is the name of your package.
+- `version` is the current version of your package.
+- `packages=find_packages()`, automatically finds packages to include. Make sure your modules/packages are properly structured in directories.
+- `entry_points` defines the entry point to your application, so you can run it from the command line. Modify the path final_project_python_basics.main:main according to the actual location of the main function in your project.
+- `author`, `author_email`, `description`, `keywords` and `license` are metadata describing your project.
+- `long_description` can contain a longer description, which is usually loaded from the README file.
+- `install_requires` allows you to define the dependencies that must be installed with your package. If your project depends on external Python libraries, list them here.
+- `python_requires` specifies the Python versions compatible with your package.
+- `classifiers` are a list of classifiers that help others find your project on PyPI and understand its context.
 
-## Użycie
+## Use of:
 
-Aplikację można uruchomić z linii poleceń po zainstalowaniu:
+The application can be run from the command line after installation:
 ```
 myassistant
 ```
 
-## Rozwój
+## Development
 
-Projekt jest w trakcie rozwoju. Wszelkie sugestie i zgłaszanie błędów są mile widziane.
+The project is under development. Any suggestions and bug reports are welcome.
 
-## Licencja
+## License
 
-Projekt jest udostępniany na licencji MIT. Szczegółowe informacje znajdują się w pliku LICENCJA.
+The project is made available under the MIT license. Please refer to the LICENSE file for details.
 
-## Autor
+## Author
 
-Grupa 2
+Group 2
