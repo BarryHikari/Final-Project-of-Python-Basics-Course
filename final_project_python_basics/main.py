@@ -33,9 +33,8 @@ class Email(Field):
             self.value = value
         else:
             raise ValueError("Invalid email address")
-    
+
     def validate_email(self, email):
-        # Basic email validation, can be improved
         return "@" in email and "." in email
     
 class Address(Field):
@@ -58,7 +57,7 @@ class Record:
         self.phones = []
         self.emails = []
         self.addresses = []
-        self.notes = {} #Create dictionary to make notes and his tags.
+        self.notes = {}
         self.birthday = None
 
     def add_notes(self, note, tags):
@@ -114,8 +113,7 @@ class Record:
         address_info = '; '.join(str(a) for a in self.addresses)
         note_info = ''.join(f"{note}. TAGI: {', '.join(tags)}\n" for note, tags in self.notes.items())
         birthday_info = f"Birthday: {self.birthday.value}" if self.birthday else "No birthday set"
-        return f"--------------------\nContact name: {self.name.value}, phones: {phone_info}, emails: {email_info}, address: {address_info}, {birthday_info}\nNotes:\n{note_info}"
-
+        return f"--\nContact name: {self.name.value}, phones: {phone_info}, emails: {email_info}, address: {address_info}, {birthday_info}\nNotes:\n{note_info}"
 
 class AddressBook(UserDict):
     def add_record(self, record):
@@ -125,10 +123,10 @@ class AddressBook(UserDict):
         return self.data.get(name)
 
     def findname(self, name):
-        name_lower = name.lower()  # Przekształć szukane imię do małych liter
+        name_lower = name.lower()
         found_contacts = []
         for contact_name, record in self.data.items():
-            if name_lower in contact_name.lower():  # Porównaj ignorując wielkość liter
+            if name_lower in contact_name.lower():
                 found_contacts.append(record)
         return found_contacts if found_contacts else None
 
@@ -199,26 +197,23 @@ class AddressBook(UserDict):
             print(f"Contact {name} not found.")
 
     def find_notes_by_tag(self, tag):
-        tag_lower = tag.lower()  # Przekształć szukany tag do małych liter
+        tag_lower = tag.lower()
         found_notes = []
         for record in self.data.values():
             for note, tags in record.notes.items():
-                # Przekształć tagi z notatek do małych liter przy porównywaniu
                 if tag_lower in [t.lower() for t in tags]:
                     found_notes.append((record.name.value, note))
         return found_notes
 
     def find_contacts_by_tag(self, tag):
-        tag_lower = tag.lower()  # Przekształć szukany tag do małych liter
+        tag_lower = tag.lower()
         found_contacts = set()
         for record in self.data.values():
             for _, tags in record.notes.items():
-                # Przekształć tagi z notatek do małych liter przy porównywaniu
                 if tag_lower in [t.lower() for t in tags]:
                     found_contacts.add(record.name.value)
-                    break  # Once a contact with the tag is found, break the loop
+                    break
         return list(found_contacts)
-
 
 def load_address_book_from_file(filename):
     try:
@@ -246,16 +241,12 @@ def intelligent_analysis(command, available_commands):
         return None
 
 def main():
-    Globalfilename = 'Myaddressbook3.dat'
-    book = load_address_book_from_file(Globalfilename)
+    filename = 'Myaddressbook3.dat'
+    book = load_address_book_from_file(filename)
     print("Welcome to the assistant bot!")
-    
-    ''' 
-        Start assistant commands:
-        comand lists: ["add", "remove_phone", "change_phone", "add_phone", "add_email", "add_address", "phone", "all", "add_birthday", "show_birthday", "birthdays", "add_notes", "find_notes_by_tag", "find_contacts_by_tag", "edit_notes", "delete_notes", "hello", "exit", "close", "delete_contact"]
-    ''' 
-    available_commands = ["add", "remove_phone", "change_phone", "add_phone", "add_email", "add_address", "phone", "all", "add_birthday", "show_birthday", "birthdays", "when_birthdays", "add_notes", "find_notes_by_tag", "find_contacts_by_tag", "edit_notes", "delete_notes", "hello", "exit", "close", "delete_contact"]
-
+    available_commands = ["add", "remove_phone", "change_phone", "add_phone", "add_email", "add_address", "phone", 
+                          "all", "add_birthday", "show_birthday", "birthdays", "when_birthdays", "add_notes", "find_notes_by_tag", 
+                          "find_contacts_by_tag", "edit_notes", "delete_notes", "hello", "exit", "close", "delete_contact"]
     while True:
         user_input = input("Enter command: ").strip()
         command, args = parse_input(user_input)
@@ -264,8 +255,6 @@ def main():
         if closest_command:
              if command != closest_command:
                 print(f"Did you mean '{closest_command}'?")
-            #continue
-        
         if command == "add":
             try:
                 input_str = ' '.join(args)
@@ -278,14 +267,12 @@ def main():
                 print(f"Contact {name} added with phone {phone}, email {email}, and address {address}")
             except ValueError:
                 print("Invalid command format. Use 'add [name]; [phone]; [email]; [address]'")
-
         elif command == "delete_contact":
             try:
                 name = ' '.join(args).strip()
-                book.remove_contact(name)  # This will invoke the remove_contact method correctly
+                book.remove_contact(name)
             except ValueError:
                 print("Invalid command format. Use 'delete_contact [name]'")
-        
         elif command == "search":
             try:
                 name = ' '.join(args).strip()
@@ -298,7 +285,6 @@ def main():
                     print("No contacts found matching the search criteria.")
             except ValueError:
                 print("Invalid command format. Use 'search [name]'")
-
         elif command == "remove_phone":
             try:
                 input_str = ' '.join(args)
@@ -311,7 +297,6 @@ def main():
                     print(f"Contact {name} not found.")
             except ValueError:
                 print("Invalid command format. Use 'remove_phone [name]; [phone]'")
-
         elif command == "change_phone":
             try:
                 input_str = ' '.join(args)
@@ -324,7 +309,6 @@ def main():
                     print(f"Contact {name} not found.")
             except ValueError:
                 print("Invalid command format. Use 'change_phone [name]; [old_phone]; [new_phone]'")
-
         elif command == "add_phone":
             try:
                 input_str = ' '.join(args)
@@ -337,7 +321,6 @@ def main():
                     print(f"Contact {name} not found.")
             except ValueError:
                 print("Invalid command format. Use 'add_phone [name]; [phone]'")
-
         elif command == "add_email":
             try:
                 input_str = ' '.join(args)
@@ -350,7 +333,6 @@ def main():
                     print(f"Contact {name} not found.")
             except ValueError:
                 print("Invalid command format. Use 'add_email [name]; [email]'")
-
         elif command == "add_address":
             try:
                 input_str = ' '.join(args)
@@ -363,7 +345,6 @@ def main():
                     print(f"Contact {name} not found.")
             except ValueError:
                 print("Invalid command format. Use 'add_address [name]; [address]'")
-
         elif command == "phone":
             try:
                 name = ' '.join(args).strip()
@@ -375,7 +356,6 @@ def main():
                     print(f"Contact {name} not found.")
             except ValueError:
                 print("Invalid command format. Use 'phone [name]'")
-
         elif command == "all":
             if book.data:
                 print("All contacts:")
@@ -383,7 +363,6 @@ def main():
                     print(record)
             else:
                 print("No contacts in the address book.")
-
         elif command == "add_birthday":
             try:
                 input_str = ' '.join(args)
@@ -396,7 +375,6 @@ def main():
                     print(f"Contact {name} not found.")
             except ValueError:
                 print("Invalid command format. Use 'add_birthday [name]; [birthday]'")
-
         elif command == "show_birthday":
             try:
                 name = ' '.join(args).strip()
@@ -409,14 +387,10 @@ def main():
                     print(f"Contact {name} not found.")
             except ValueError:
                 print("Invalid command format. Use 'show_birthday [name]'")
-
-
         elif command == "birthdays":
             book.get_birthdays_per_week()
-            
         elif command == "when_birthdays":
             book.when_birthdays()
-
         elif command == "delete_contact":
             try:
                 name = ' '.join(args).strip()
@@ -427,11 +401,10 @@ def main():
                     print(f"Contact {name} not found.")
             except ValueError:
                 print("Invalid command format. Use 'delete_contact [name]'")
-
         elif command == "add_notes":
             try:
-                input_str = ' '.join(args)  # Combine all arguments into a single string
-                name, rest = input_str.split(';', 1)  # Split into name and the rest at the first semicolon
+                input_str = ' '.join(args)
+                name, rest = input_str.split(';', 1)
                 name = name.strip()
                 note, *tags = [part.strip() for part in rest.split(";")]
                 if name and note:
@@ -446,7 +419,6 @@ def main():
                     print("Missing required information for adding notes.")
             except ValueError:
                 print("Invalid command format. Use 'add_notes [name]; [note]; [tag1; tag2; ...]'")
-
         elif command == "find_notes_by_tag": 
             try:
                 tag = args[0]
@@ -459,7 +431,6 @@ def main():
                     print(f"No notes found with tag '{tag}'")
             except IndexError:
                 print("Invalid command format. Use 'find_notes_by_tag [tag]'")
-
         elif command == "find_contacts_by_tag":
             try:
                 tag = args[0]
@@ -472,11 +443,10 @@ def main():
                     print(f"No contacts found with tag '{tag}'")
             except IndexError:
                 print("Invalid command format. Use 'find_contacts_by_tag [tag]'")
-
         elif command == "edit_notes":
             try:
-                input_str = ' '.join(args)  # Combine all arguments back into a single string
-                name, rest = input_str.split(';', 1)  # Split into name and the rest at the first semicolon
+                input_str = ' '.join(args)
+                name, rest = input_str.split(';', 1)
                 name = name.strip()
                 old_note, new_note, *tags = [part.strip() for part in rest.split(";")]
                 if name and old_note and new_note:
@@ -490,11 +460,10 @@ def main():
                     print("Missing required information for editing notes.")
             except ValueError:
                 print("Invalid command format. Use 'edit_notes [name]; [old_note]; [new_note]; [tag1; tag2; ...]'")
-
         elif command == "delete_notes":
             try:
-                input_str = ' '.join(args)  # Combine all arguments into a single string
-                name, note = input_str.split(';', 1)  # Attempt to split input into name and note
+                input_str = ' '.join(args)
+                name, note = input_str.split(';', 1)
                 name = name.strip()
                 note = note.strip()
                 if name and note:
@@ -508,53 +477,15 @@ def main():
                     print("Missing required information for deleting notes.")
             except ValueError:
                 print("Invalid command format. Use 'delete_notes [name]; [note]'")
-
         elif command == "hello":
             print("How can I help you?")
-        
         elif command in ["close", "exit"]:
             print("Goodbye!")
-            book.save_to_file(Globalfilename)
+            book.save_to_file(filename)
             print("Saving address book and closing the app.")
             break
-
         else:
             print("Invalid command. Please try again")
 
 if __name__ == "__main__":
     main()
-
-
-#to jest kod po dodaniu inteligentnego podpowiadania komend przez asystenta
-#edycji i kasowaniu notatek
-#poprawiony kod o podawanie komend przy użyciu ; aby można było imie i nazwisko podać etc.
-
-# add Artur Laski; 0721199939 a@a.pl Katowice
-# add Michal Misterkiewicz; 0999888777 michu@gmail.com Sosnowiec
-# add Monika Misterkiewicz; 0505031265 m@m.pl Sosnowiec
-# all
-# search Mich
-# search Misterk
-# search Las
-# remove ===> powinien podpowiedzieć komendę: Did you mean 'remove_phone'?
-# remove_phone Michal 0999888777
-# add_phone Michal 0777666555
-# change_phone Michal 0777666555 0111222333
-# add_email Michal m2@m.pl
-# add_address Michal Krakow
-# phone Michal Misterkiewicz
-# add_birthday Michal Misterkiewicz 04.04.1983
-# show_birthday Michal Misterkiewicz
-# birthdays          ====>> if someone have a birthday in next week
-# when_birthdays Michal Misterkiewicz
-# delete_contact Michal Misterkiewicz
-# add Michal Misterkiewicz 0999888777 michu@gmail.com Sosnowiec
-# add_notes Michal Misterkiewicz; To jest pierwsza notatka od szwagra; family; c++; friend
-# add_notes Monika Misterkiewicz; To jest testowa notatka rodzinna; family; wife
-# find_notes_by_tag family
-# find_contacts_by_tag wife
-# edit_notes Monika Misterkiewicz; To jest testowa notatka rodzinna; To notes rodzinny; family; wife
-# delete_notes Michał Misterkiewicz; To jest pierwsza notatka od szwagra
-# hello
-# close
-# exit
